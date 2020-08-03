@@ -356,7 +356,7 @@ resource "aws_route_table_association" "jenkinscc_public02_assoc" {
 
 
 # #Security groups
-#Private Security Group
+# Public Security Group
 resource "aws_security_group" "jenkinscc_public_sg" {
   name        = "jenkinscc_private_sg"
   description = "Used for private instances"
@@ -389,22 +389,6 @@ resource "aws_security_group" "jenkinscc_vpc_endpoint_sg" {
     to_port     = 443
     protocol    = "tcp"
     cidr_blocks = [var.vpc_cidr]
-  }
-}
-
-
-#S3 code bucket
-resource "random_id" "jenkinscc_ssm_s3" {
-  byte_length = 2
-}
-
-resource "aws_s3_bucket" "jenkinscc_ssm_logs_bucket" {
-  bucket        = "${var.domain_name}-${random_id.jenkinscc_ssm_s3.dec}"
-  acl           = "private"
-  force_destroy = true
-
-  tags = {
-    Name = "jenkinscc_ssm_logs_bucket"
   }
 }
 
