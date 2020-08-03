@@ -26,7 +26,7 @@ pipeline {
     stage('Download Key file from s3') {
       steps {
         withAWS(credentials:'awscredentials', region:'us-east-1') {
-          s3Download(file: 'ssmTestKeyPair.pem', bucket: 'jenkins-terraform-aws-44rf5', path: 'security/')
+          s3Download(file: 'ssmTestKeyPair.pem', bucket: 'jenkins-terraform-aws-44rf5', path: 'security/ssmTestKeyPair.pem', force: 'true')
       }
     }
 
@@ -36,7 +36,7 @@ pipeline {
       /* groovylint-disable-next-line DuplicateStringLiteral */
       steps {
         withAWS(credentials:'awscredentials', region:'us-east-1') {
-          s3Download(file: 'terraform.tfstate', bucket: 'jenkins-terraform-aws-44rf5', path: 'terraform-backend/')
+          s3Download(file: 'terraform.tfstate', bucket: 'jenkins-terraform-aws-44rf5', path: 'terraform-backend/terraform.tfstate', force: 'true')
       }
     }
   }
