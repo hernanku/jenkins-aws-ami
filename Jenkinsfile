@@ -83,11 +83,12 @@ pipeline {
         }
       }
     }
-    // Clean up workspace post job run
-    post {
-      always {
-        cleanWs()
-      }
+  }
+
+  // Clean up workspace post job run
+  post {
+    always {
+      cleanWs()
     }
   }
 }
