@@ -86,5 +86,11 @@ pipeline {
     //     sh '/usr/local/bin/terraform apply -input=false tfplan'
     //   }
   }
+  // Clean up workspace post job run
+  post {
+    always {
+      cleanWs()
+    }
+  }
 }
 
