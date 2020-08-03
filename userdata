@@ -1,4 +1,10 @@
 #!/bin/bash
+
+# Install Amazon ssm Agent 
 cd /tmp
 curl https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm -o amazon-ssm-agent.rpm
 yum install -y amazon-ssm-agent.rpm
+
+
+# Start docker app
+docker run -d --rm --name web-test -p 80:80 hernanku/linux_tweet_app:latest
