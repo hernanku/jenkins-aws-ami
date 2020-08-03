@@ -1,8 +1,18 @@
+# Remote state
+terraform {
+  backend "s3" {
+    bucket = "jenkins-terraform-aws-44rf5"
+    key    = "terraform-backend/terraform.tfstate"
+    region = "us-east-1"
+  }
+}
+
 provider "aws" {
   region     = var.aws_region
   access_key = var.aws_access_key
   secret_key = var.aws_secret_key
 }
+
 
 #------------IAM--------------- 
 #S3_access
@@ -23,6 +33,16 @@ resource "aws_iam_role_policy" "jenkinscc_s3_access_policy" {
       "Effect": "Allow",
       "Action": "s3:*",
       "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "s3:ListBucket",
+      "Resource": "arn:aws:s3:::jenkins-terraform-aws-44rf5"
+    },
+    {
+      "Effect": "Allow",
+      "Action": ["s3:GetObject", "s3:PutObject"],
+      "Resource": "arn:aws:s3:::jenkins-terraform-aws-44rf5/terraform-backend/terraform.tfstate"
     }
   ]
 }
@@ -407,14 +427,12 @@ resource "aws_instance" "jenkinscc_dev" {
 cat <<EOF > hosts 
 [aws-docker-vms]
 ${aws_instance.jenkinscc_dev.public_ip}
-[aws-docker-vms:vars] 
-ansible_ssh_private_key_file=${var.ansible_key_file_path} 
 EOF
 EOD
   }
 
   provisioner "local-exec" {
-    command = "aws ec2 wait instance-status-ok --instance-ids ${aws_instance.jenkinscc_dev.id} && ansible-playbook -i hosts docker-setup.yml"
+    command = "aws ec2 wait instance-status-ok --instance-ids ${aws_instance.jenkinscc_dev.id} && ansible-playbook -i hosts docker-setup.yml --extra-vars \"ansible_ssh_private_key_file='${var.ansible_key_file_path}'\""
   }
 }
 
