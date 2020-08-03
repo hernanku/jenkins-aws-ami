@@ -74,18 +74,19 @@ pipeline {
         withAWS(credentials: 'awscredentials', region: 'us-east-1') {
           sh "/usr/local/bin/terraform plan -out=tfplan -input=false"
         }
-        
 
         // Checking if tfplan created post terraform plan
         sh "cat $WORKSPACE/tfplan"
       }
     }
-    // stage('Terraform Apply') {
-    //   steps {
-    //     input 'Apply Plan'
-    //     sh '/usr/local/bin/terraform apply -input=false tfplan'
-    //   }
-  }
+    stage('Terraform Apply') {
+      steps {
+        input 'Apply Plan'
+        withAWS(credentials: 'awscredentials', region: 'us-east-1') {
+          sh '/usr/local/bin/terraform apply -input=false tfplan -auto-approve'
+        }       
+      }
+    }
   // Clean up workspace post job run
   post {
     always {
