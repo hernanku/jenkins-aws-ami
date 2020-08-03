@@ -75,6 +75,8 @@ pipeline {
         sh "cat $WORKSPACE/tfplan"
       }
     }
+
+    // Applying terraform infra
     stage('Terraform Apply') {
       steps {
         input 'Apply Plan'
