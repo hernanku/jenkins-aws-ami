@@ -55,8 +55,6 @@ pipeline {
     stage('Update tfvars file with ec2 keypath path info') {
       steps {
         sh "echo ansible_key_file_path = \\\"$WORKSPACE/ssmTestKeyPair.pem\\\" >> $WORKSPACE/terraform.tfvars"
-        sh "echo aws_access_key = \\\"${params.AWS_ACCESS_KEY_ID}\\\" >> $WORKSPACE/terraform.tfvars"
-        sh "echo aws_secret_key = \\\"${params.AWS_SECRET_ACCESS_KEY}\\\" >> $WORKSPACE/terraform.tfvars"
 
         // Checking contents of tfvars after updating
         sh "cat $WORKSPACE/terraform.tfvars"
@@ -66,12 +64,17 @@ pipeline {
 
     stage('Terraform Init') {
       steps {
-        sh "/usr/local/bin/terraform init -input=false"
+        withAWS(credentials: 'awscredentials', region: 'us-east-1') {
+          sh "/usr/local/bin/terraform init -input=false"
+        }       
       }
     }
     stage('Terraform Plan') {
       steps {
-        sh "/usr/local/bin/terraform plan -out=tfplan -input=false"
+        withAWS(credentials: 'awscredentials', region: 'us-east-1') {
+          sh "/usr/local/bin/terraform plan -out=tfplan -input=false"
+        }
+        
 
         // Checking if tfplan created post terraform plan
         sh "cat $WORKSPACE/tfplan"
