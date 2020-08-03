@@ -44,7 +44,7 @@ pipeline {
     stage('Check if files downloaded from s3') {
       steps {
 
-        sh "ls -altr *.pem *.tfstate"
+        sh "ls -altr *.pem *.tfvars"
         sh "echo $WORKSPACE"
 
         // Checking contents of tfvars before updating
