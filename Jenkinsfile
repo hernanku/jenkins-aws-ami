@@ -41,6 +41,11 @@ pipeline {
 
     stage('Check if files downloaded from s3') {
       steps {
+
+        // Changin permissions for key file
+        sh "chmod 400 $WORKSPACE/ssmTestKeyPair.pem"
+
+        // Checking file presence and permission.
         sh 'ls -altr *.pem *.tfvars'
         sh "echo $WORKSPACE"
 
@@ -48,6 +53,18 @@ pipeline {
         sh "cat $WORKSPACE/terraform.tfvars"
       }
     }
+
+    stage('Changin permissions for key file') {
+      steps {
+        sh 'ls -altr *.pem *.tfvars'
+        sh "echo $WORKSPACE"
+    // Checking contents of tfvars before updating
+        sh "cat $WORKSPACE/terraform.tfvars"
+  }
+}
+    
+
+
 
     stage('Update tfvars file with ec2 keypath path info') {
       steps {
