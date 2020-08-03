@@ -18,25 +18,31 @@ pipeline {
       steps {
         git branch: 'master', url: 'https://github.com/hernanku/jenkins-aws-ami.git'
 
-        sh "ls -altr"
-        sh "echo $WORKSPACE"
+        // sh "ls -altr"
+        // sh "echo $WORKSPACE"
       }
     }
 
-    // stage('Download Key file from s3') {
-    //   withAWS(credentials:'awscredentials') {
-    //     s3Download(file: 'ssmTestKeyPair.pem', bucket: 'jenkins-terraform-aws-44rf5', path: 'security')
-    //   }
-    // }
+    stage('Download Key file from s3') {
+      withAWS(credentials:'awscredentials') {
+        s3Download(file: 'ssmTestKeyPair.pem', bucket: 'jenkins-terraform-aws-44rf5', path: 'security')
+      }
+    }
 
-    // stage('Download tfvars file from s3') {
-    //   /* groovylint-disable-next-line DuplicateStringLiteral */
-    //   withAWS(credentials:'awscredentials') {
-    //     s3Download(file: 'terraform.tfstate', bucket: 'jenkins-terraform-aws-44rf5', path: 'terraform-backend')
-    //   }
-    // }
+    stage('Download tfvars file from s3') {
+      /* groovylint-disable-next-line DuplicateStringLiteral */
+      withAWS(credentials:'awscredentials') {
+        s3Download(file: 'terraform.tfstate', bucket: 'jenkins-terraform-aws-44rf5', path: 'terraform-backend')
+      }
+    }
 
-    
+    stage('CHeck if files downloaded from s3') {
+      steps {
+
+        sh "ls -altr *.pem *.tfstate"
+        sh "echo $WORKSPACE"
+      }
+    }
 
     // stage('Terraform Init') {
     //   steps {
