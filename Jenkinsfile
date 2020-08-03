@@ -18,7 +18,7 @@ pipeline {
       steps {
         git branch: 'master',
           credentialsId: 'github_token',
-          url: 'git@github.com:hernanku/jenkins-aws-ami.git'
+          url: 'https://github.com/hernanku/jenkins-aws-ami.git'
 
         sh "ls -altr"
       }
