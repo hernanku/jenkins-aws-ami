@@ -432,7 +432,7 @@ EOD
   }
 
   provisioner "local-exec" {
-    command = "aws ec2 wait instance-status-ok --instance-ids ${aws_instance.jenkinscc_dev.id} && ansible-playbook -i hosts docker-setup.yml --extra-vars \"ansible_ssh_private_key_file='${var.ansible_key_file_path}'\""
+    command = "/usr/local/bin/aws ec2 wait instance-status-ok --instance-ids ${aws_instance.jenkinscc_dev.id} && ansible-playbook -i hosts docker-setup.yml --extra-vars \"ansible_ssh_private_key_file='${var.ansible_key_file_path}'\""
   }
 }
 
