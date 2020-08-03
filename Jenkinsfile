@@ -62,16 +62,19 @@ pipeline {
       }
     }
 
-    // stage('Terraform Init') {
-    //   steps {
-    //     sh '/usr/local/bin/terraform init -input=false'
-    //   }
-    // }
-    // stage('Terraform Plan') {
-    //   steps {
-    //     sh "/usr/local/bin/terraform plan -out=tfplan -input=false -var-file='dev.tfvars'"
-    //   }
-    // }
+    stage('Terraform Init') {
+      steps {
+        sh "/usr/local/bin/terraform init -input=false"
+      }
+    }
+    stage('Terraform Plan') {
+      steps {
+        sh "/usr/local/bin/terraform plan -out=tfplan -input=false"
+
+        // Checking if tfplan created post terraform plan
+        sh "cat $WORKSPACE/tfplan"
+      }
+    }
     // stage('Terraform Apply') {
     //   steps {
     //     input 'Apply Plan'
