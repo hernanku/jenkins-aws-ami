@@ -36,7 +36,7 @@ pipeline {
       /* groovylint-disable-next-line DuplicateStringLiteral */
       steps {
         withAWS(credentials:'awscredentials', region:'us-east-1') {
-          s3Download(file: 'terraform.tfstate', bucket: 'jenkins-terraform-aws-44rf5', path: 'terraform-backend/terraform.tfstate', force: 'true')
+          s3Download(file: 'terraform.tfvars', bucket: 'jenkins-terraform-aws-44rf5', path: 'jenkins-aws-terraform/terraform.tfvars', force: 'true')
       }
     }
   }
@@ -46,6 +46,19 @@ pipeline {
 
         sh "ls -altr *.pem *.tfstate"
         sh "echo $WORKSPACE"
+
+        // Checking contents of tfvars before updating
+        sh "cat $WORKSPACE/terraform.tfvars"
+      }
+    }
+
+    stage('Update tfvars file with ec2 keypath path info') {
+      steps {
+        sh "echo ansible_key_file_path = \\\"$WORKSPACE/ssmTestKeyPair.pem\\\" >> $WORKSPACE/terraform.tfvars"
+
+        // Checking contents of tfvars after updating
+        sh "cat $WORKSPACE/terraform.tfvars"
+
       }
     }
 
