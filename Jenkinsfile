@@ -79,7 +79,7 @@ pipeline {
       steps {
         input 'Apply Plan'
         withAWS(credentials: 'awscredentials', region: 'us-east-1') {
-          sh '/usr/local/bin/terraform apply -input=false tfplan -auto-approve'
+          sh "/usr/local/bin/terraform apply -input=false $WORKSPACE/tfplan"
         }
       }
     }
