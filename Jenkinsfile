@@ -55,6 +55,8 @@ pipeline {
     stage('Update tfvars file with ec2 keypath path info') {
       steps {
         sh "echo ansible_key_file_path = \\\"$WORKSPACE/ssmTestKeyPair.pem\\\" >> $WORKSPACE/terraform.tfvars"
+        sh "echo aws_access_key = \\\"${params.AWS_ACCESS_KEY_ID}\\\" >> $WORKSPACE/terraform.tfvars"
+        sh "echo aws_secret_key = \\\"${params.AWS_SECRET_ACCESS_KEY}\\\" >> $WORKSPACE/terraform.tfvars"
 
         // Checking contents of tfvars after updating
         sh "cat $WORKSPACE/terraform.tfvars"
