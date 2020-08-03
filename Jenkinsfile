@@ -14,11 +14,9 @@ pipeline {
   }
   stages {
 
-    stage('CHeckout git repo') {
+    stage('Checkout git repo') {
       steps {
-        git branch: 'master',
-          credentialsId: 'github_token',
-          url: 'https://github.com/hernanku/jenkins-aws-ami.git'
+        git branch: 'master', url: 'https://github.com/hernanku/jenkins-aws-ami.git'
 
         sh "ls -altr"
       }
