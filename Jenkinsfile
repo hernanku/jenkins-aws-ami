@@ -19,6 +19,7 @@ pipeline {
         git branch: 'master', url: 'https://github.com/hernanku/jenkins-aws-ami.git'
 
         sh "ls -altr"
+        sh "echo $WORKSPACE"
       }
     }
 
