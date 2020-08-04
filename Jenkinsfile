@@ -57,7 +57,6 @@ pipeline {
     stage('Changin permissions for key file') {
       steps {
         sh 'ls -altr *.pem *.tfvars'
-        sh "echo $WORKSPACE"
     // Checking contents of tfvars before updating
         sh "cat $WORKSPACE/terraform.tfvars"
   }

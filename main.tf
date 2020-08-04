@@ -215,7 +215,7 @@ resource "aws_subnet" "jenkinscc_subnet_public02" {
 }
 
 #create VPC endpoints
-resource "aws_vpc_endpoint" "careCentrix-vpc-endpoint-priv-ssm" {
+resource "aws_vpc_endpoint" "jenkinscc_vpc_endpoint_public_ssm" {
   vpc_id            = aws_vpc.jenkinscc_vpc.id
   service_name      = "com.amazonaws.${var.aws_region}.ssm"
   vpc_endpoint_type = "Interface"
@@ -242,7 +242,7 @@ resource "aws_vpc_endpoint" "careCentrix-vpc-endpoint-priv-ssm" {
 POLICY
 }
 
-resource "aws_vpc_endpoint" "careCentrix-vpc-endpoint-priv-ssmmsg" {
+resource "aws_vpc_endpoint" "jenkinscc_vpc_endpoint_public_ssmmsg" {
   vpc_id            = aws_vpc.jenkinscc_vpc.id
   service_name      = "com.amazonaws.${var.aws_region}.ssmmessages"
   vpc_endpoint_type = "Interface"
@@ -268,7 +268,7 @@ resource "aws_vpc_endpoint" "careCentrix-vpc-endpoint-priv-ssmmsg" {
 POLICY
 }
 
-resource "aws_vpc_endpoint" "careCentrix-vpc-endpoint-priv-ec2msg" {
+resource "aws_vpc_endpoint" "jenkinscc_vpc_endpoint_public_ec2msg" {
   vpc_id            = aws_vpc.jenkinscc_vpc.id
   service_name      = "com.amazonaws.${var.aws_region}.ec2messages"
   vpc_endpoint_type = "Interface"
@@ -295,7 +295,7 @@ POLICY
 }
 
 
-resource "aws_vpc_endpoint" "careCentrix-vpc-endpoint-priv-ec2" {
+resource "aws_vpc_endpoint" "jenkinscc_vpc_endpoint_public_ec2" {
   vpc_id            = aws_vpc.jenkinscc_vpc.id
   service_name      = "com.amazonaws.${var.aws_region}.ec2"
   vpc_endpoint_type = "Interface"
@@ -322,7 +322,7 @@ POLICY
 }
 
 
-resource "aws_vpc_endpoint" "careCentrix-vpc-endpoint-priv-s3-gateway" {
+resource "aws_vpc_endpoint" "jenkinsccvpc_endpoint_public_s3_gateway" {
   vpc_id       = aws_vpc.jenkinscc_vpc.id
   service_name = "com.amazonaws.${var.aws_region}.s3"
 
@@ -422,7 +422,7 @@ EOD
 
 #load balancer
 resource "aws_elb" "jenkinscc_elb" {
-  name = "${var.domain_name}-elb"
+  name = "jenkinscc-elb"
 
   subnets = [aws_subnet.jenkinscc_subnet_public01.id,
     aws_subnet.jenkinscc_subnet_public02.id,
@@ -435,6 +435,13 @@ resource "aws_elb" "jenkinscc_elb" {
     instance_protocol = "tcp"
     lb_port           = 22
     lb_protocol       = "tcp"
+  }
+
+  listener {
+  instance_port     = 80
+  instance_protocol = "http"
+  lb_port           = 80
+  lb_protocol       = "http"
   }
 
   health_check {
@@ -451,7 +458,7 @@ resource "aws_elb" "jenkinscc_elb" {
   connection_draining_timeout = 400
 
   tags = {
-    Name = "jenkinscc_${var.domain_name}-elb"
+    Name = "jenkinscc-elb"
   }
 }
 
