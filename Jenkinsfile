@@ -52,9 +52,6 @@ pipeline {
         withAWS(credentials: 'awscredentials', region: 'us-east-1') {
           sh '/usr/local/bin/terraform plan -out=tfplan -input=false'
         }
-
-        // Checking if tfplan created post terraform plan
-        sh "cat $WORKSPACE/tfplan"
       }
     }
 
